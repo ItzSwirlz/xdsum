@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::io::Read;
+use std::ops::{Shr, Index};
 use std::{fs::File, path::PathBuf};
 use std::path::{self, Path};
 
@@ -14,26 +15,25 @@ fn main() {
     let path = File::open(args.file);
     let bytes: &mut Vec<u8> = &mut vec![];
     path.unwrap().read_to_end(bytes).unwrap();
-    
-    // now, split our file into 8 chunks
-    let mut iter = bytes.chunks(bytes.len() / 8);
-    while !iter.next().is_none() {
-        let mut current_iter = iter.next().unwrap().to_owned();
-        let mut i = 1;
-        while i <= current_iter.len() - 1 {
-            current_iter[i] *= (current_iter[i - 1] % 255) ;
-            i += 1;
-        }
-        iter.next();
-    }
 
+    let mut summed = bytes.clone().to_owned();
+    for i in bytes.iter().enumerate() {
+        if(i.0 == bytes.len() - 1) {
+            break;
+        }
+        summed[i.0 + 1] *= i.1;
+    }
+    println!("{:#?}", summed);
     
     let ret: &mut Vec<char> = &mut vec![];
-    for i in bytes {
-        let j = *i as char;
-        if(j.is_ascii_alphanumeric()) {
-            ret.push(j);
+    let mut count = 0;
+    for mut i in summed.clone() {
+        i >>= count;
+        count += 1;
+        if(i.is_ascii_alphanumeric()) {
+            ret.push(i as char);
         }
     }
+    
     println!("{}", ret.into_iter().map(|i| i.to_string()).collect::<String>());
 }
