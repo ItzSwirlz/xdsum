@@ -1,10 +1,12 @@
 use clap::Parser;
+use sha2::digest::generic_array::functional::FunctionalSequence;
 use std::fs::*;
 use std::fs;
 use std::io::*;
 use std::os::unix::prelude::PermissionsExt;
 use std::path::*;
-use sha256;
+use std::u8;
+use sha2::*;
 
 #[derive(Parser)]
 struct Cli {
@@ -24,9 +26,13 @@ fn main() {
 
         // file mode
         tmp_file.write(&[metadata.permissions().mode() as u8]).expect("Failed to write permission nodes to the temp file");
-        println!("{}", sha256::try_digest(Path::new("./xdsum.tmp")).unwrap());
+        let mut hasher = Sha256::new();
+        hasher.update(fs::read("xdsum.tmp").unwrap());
+        let ret = hasher.finalize().to_vec();
+        let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
+        println!("{}", mret);
     }
     
     // remove the tmp file
-    fs::remove_file("xdsum.tmp").expect("Failed to remove the temp file");
+    //fs::remove_file("xdsum.tmp").expect("Failed to remove the temp file");
 }
