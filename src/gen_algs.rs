@@ -1,17 +1,17 @@
-use md5;
-use md2::{Md2};
-use md4::{Md4};
-use whirlpool::{Whirlpool, Digest};
-use tiger::{Tiger};
-use streebog::{Streebog256, Streebog512};
-use sm3::{Sm3};
-use ascon_hash::{AsconHash};
-use belt_hash::{BeltHash};
-use gost94::{Gost94CryptoPro};
-use groestl::{Groestl256};
-use sha1::{Sha1};
+use ascon_hash::AsconHash;
+use belt_hash::BeltHash;
 use blake2::{Blake2b512, Blake2s256};
+use gost94::Gost94CryptoPro;
+use groestl::Groestl256;
+use md2::Md2;
+use md4::Md4;
+use md5;
+use sha1::Sha1;
+use sm3::Sm3;
 use std::fs;
+use streebog::{Streebog256, Streebog512};
+use tiger::Tiger;
+use whirlpool::{Digest, Whirlpool};
 
 pub fn calculate_md5() {
     let digest = md5::compute(fs::read("xdsum.tmp").unwrap());
