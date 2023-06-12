@@ -38,10 +38,13 @@ fn main() {
 
     // get metadata
     let metadata = metadata(args.file).expect("Failed to get file metadata");
+    let mut permissions = metadata.permissions();
+
+    permissions.set_readonly(false);
 
     // file mode
     tmp_file
-        .write(&[metadata.permissions().readonly() as u8])
+        .write(&[permissions.readonly() as u8])
         .expect("Failed to write permission nodes to the temp file");
 
     match args.function.to_lowercase().as_str() {
