@@ -1,21 +1,22 @@
-mod sha2algs;
-mod gen_algs;
-mod shabal_algs;
 mod fsb_algs;
+mod gen_algs;
 mod jh_algs;
 mod ripemd_algs;
+mod sha2algs;
 mod sha3algs;
+mod shabal_algs;
 use clap::Parser;
-use sha2algs::*;
-use sha3algs::*;
-use gen_algs::*;
-use shabal_algs::*;
 use fsb_algs::*;
+use gen_algs::*;
 use jh_algs::*;
 use ripemd_algs::*;
+use sha2algs::*;
+use sha3algs::*;
+use shabal_algs::*;
 use std::fs;
 use std::fs::*;
 use std::io::*;
+use std::os::unix::prelude::PermissionsExt;
 use std::u8;
 
 #[derive(Parser)]
@@ -38,14 +39,16 @@ fn main() {
 
     // get metadata
     let metadata = metadata(args.file).expect("Failed to get file metadata");
-    let mut permissions = metadata.permissions();
-
-    permissions.set_readonly(false);
+    let permissions = metadata.permissions();
 
     // file mode
     tmp_file
-        .write(&[permissions.readonly() as u8])
+        .write(&[permissions.mode() as u8])
         .expect("Failed to write permission nodes to the temp file");
+
+    tmp_file
+        .write(&[permissions.readonly() as u8])
+        .expect("Failed to write readonly vale to the temp file");
 
     match args.function.to_lowercase().as_str() {
         "sha1sum" | "sha1" => calculate_sha1(),
