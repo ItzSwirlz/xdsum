@@ -41,11 +41,17 @@ fn main() {
     let metadata = metadata(args.file).expect("Failed to get file metadata");
     let permissions = metadata.permissions();
 
+    // file length
+    tmp_file
+        .write(&[metadata.len() as u8])
+        .expect("Failed to write length to the temp file");
+
     // file mode
     tmp_file
         .write(&[permissions.mode() as u8])
         .expect("Failed to write permission nodes to the temp file");
 
+    // read only
     tmp_file
         .write(&[permissions.readonly() as u8])
         .expect("Failed to write readonly vale to the temp file");
@@ -101,6 +107,11 @@ fn main() {
             );
         }
     }
+
+    println!("\nxdsum noted the following extra information and added it to the hashed data:");
+    println!("File Length: {}", metadata.len());
+    println!("File Mode: {}", permissions.mode());
+    println!("Read Only: {}", permissions.readonly());
 
     // remove the tmp file
     fs::remove_file("xdsum.tmp").expect("Failed to remove the temp file");
