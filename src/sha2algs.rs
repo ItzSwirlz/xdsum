@@ -6,56 +6,56 @@
 use sha2::*;
 use std::fs;
 
-pub fn calculate_sha224() {
+pub fn calculate_sha224() -> String {
     let mut hasher = Sha224::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
 
-pub fn calculate_sha256() {
+pub fn calculate_sha256() -> String {
     let mut hasher = Sha256::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
 
-pub fn calculate_sha384() {
+pub fn calculate_sha384() -> String {
     let mut hasher = Sha384::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
 
-pub fn calculate_sha512() {
+pub fn calculate_sha512() -> String {
     let mut hasher = Sha512::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
 
-pub fn calculate_sha512_224() {
+pub fn calculate_sha512_224() -> String {
     let mut hasher = Sha512_224::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
 
-pub fn calculate_sha512_256() {
+pub fn calculate_sha512_256() -> String {
     let mut hasher = Sha512_256::new();
     hasher.update(fs::read("xdsum.tmp").unwrap());
     let ret = hasher.finalize().to_vec();
     let mret: String = ret.iter().map(|x| format!("{:x}", x).to_string()).collect();
 
-    println!("{}", mret);
+    return mret;
 }
